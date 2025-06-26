@@ -1,7 +1,10 @@
 package com.elearning.course_service;
 
+import com.elearning.course_service.entities.Session;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "courses")
@@ -16,6 +19,11 @@ public class Course {
     private String title;
     private String description;
     private Double price;
-    private String instructor; // or instructorId if you want to link to users
+    private String instructor;
     private boolean approved;
+
+    private  String instructorName;
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Session> sessions;
 }
