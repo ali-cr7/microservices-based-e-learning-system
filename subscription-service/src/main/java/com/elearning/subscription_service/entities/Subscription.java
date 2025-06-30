@@ -1,4 +1,4 @@
-package com.elearning.subscription_service;
+package com.elearning.subscription_service.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

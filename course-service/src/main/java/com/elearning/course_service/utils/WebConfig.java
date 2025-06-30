@@ -1,4 +1,4 @@
-package com.elearning.course_service;
+package com.elearning.course_service.utils;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;

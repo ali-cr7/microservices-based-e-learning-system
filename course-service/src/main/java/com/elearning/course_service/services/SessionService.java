@@ -1,7 +1,7 @@
 package com.elearning.course_service.services;
 
-import com.elearning.course_service.Course;
-import com.elearning.course_service.CourseRepository;
+import com.elearning.course_service.entities.Course;
+import com.elearning.course_service.repositories.CourseRepository;
 import com.elearning.course_service.dto.SessionDto;
 import com.elearning.course_service.entities.Session;
 import com.elearning.course_service.repositories.SessionRepository;

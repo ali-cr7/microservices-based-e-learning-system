@@ -1,5 +1,6 @@
-package com.elearning.subscription_service;
+package com.elearning.subscription_service.repositories;
 
+import com.elearning.subscription_service.entities.Subscription;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

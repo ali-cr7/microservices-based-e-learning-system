@@ -1,6 +1,5 @@
 package com.elearning.course_service.entities;
 
-import com.elearning.course_service.Course;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;

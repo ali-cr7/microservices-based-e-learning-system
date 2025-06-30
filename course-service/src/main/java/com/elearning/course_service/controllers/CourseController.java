@@ -1,10 +1,13 @@
-package com.elearning.course_service;
+package com.elearning.course_service.controllers;
 
 import com.elearning.course_service.dto.CourseResponseDto;
 import com.elearning.course_service.dto.SessionDto;
 import com.elearning.course_service.dto.UserDto;
+import com.elearning.course_service.entities.Course;
+import com.elearning.course_service.services.CourseService;
 import com.elearning.course_service.services.FileStorageService; // New import
 import com.elearning.course_service.services.SessionService;
+import com.elearning.course_service.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -256,16 +259,19 @@ public class CourseController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Missing or invalid Authorization header");
         }      String token = authHeader.substring(7);
         if (!jwtUtil.validateToken(token)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid or expired token");       }
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid or expired token");
+        }
         String userEmail = jwtUtil.extractAllClaims(token).getSubject();
         String roleFromToken = jwtUtil.extractRole(token);
         CourseResponseDto course = courseService.getCourseById(courseId);
         if (course == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course not found");       }       // All authenticated users can view sessions
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course not found");
+        }       // All authenticated users can view sessions
 
 
              List<SessionDto> sessions = sessionService.getSessionsByCourseId(courseId);
-        return ResponseEntity.ok(sessions);  }
+        return ResponseEntity.ok(sessions);
+    }
     @GetMapping("/sessions/{sessionId}")
     public ResponseEntity<?> getSessionById(@RequestHeader("Authorization") String authHeader, @PathVariable Long sessionId) {
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -275,7 +281,8 @@ public class CourseController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid or expired token");
         }      // All authenticated users can view a specific session
         Optional<SessionDto> sessionDto = sessionService.getSessionById(sessionId);
-        return sessionDto.map(ResponseEntity::ok)             .orElse(ResponseEntity.notFound().build());  }
+        return sessionDto.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    }
     @DeleteMapping("/sessions/{sessionId}")
     public ResponseEntity<?> deleteSession(@RequestHeader("Authorization") String authHeader, @PathVariable Long sessionId) {
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -283,7 +290,8 @@ public class CourseController {
         }       String token = authHeader.substring(7);
         if (!jwtUtil.validateToken(token)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid or expired token");
-        }       String userEmail = jwtUtil.extractAllClaims(token).getSubject();
+        }
+        String userEmail = jwtUtil.extractAllClaims(token).getSubject();
         String roleFromToken = jwtUtil.extractRole(token);
         Optional<SessionDto> sessionDto = sessionService.getSessionById(sessionId);
         if (sessionDto.isEmpty()) {
@@ -291,7 +299,10 @@ public class CourseController {
         Long courseId = sessionDto.get().getCourseId(); 
             CourseResponseDto course = courseService.getCourseById(courseId);   
                if (course == null) {        
-                  return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Associated course not found for session");      }      if (!"ADMIN".equals(roleFromToken) && !(("INSTRUCTOR".equals(roleFromToken) || "ADMIN".equals(roleFromToken)) && userEmail.equals(course.getInstructor()))) {
+                  return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Associated course not found for session");
+               }      if (!"ADMIN".equals(roleFromToken) && !(("INSTRUCTOR".equals(roleFromToken) || "ADMIN".equals(roleFromToken)) && userEmail.equals(course.getInstructor()))) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only the course instructor or an admin can delete sessions from this course");
-        }      sessionService.deleteSession(sessionId);
-        return ResponseEntity.ok().build();  }}
+        }
+               sessionService.deleteSession(sessionId);
+        return ResponseEntity.ok().build();
+    }}

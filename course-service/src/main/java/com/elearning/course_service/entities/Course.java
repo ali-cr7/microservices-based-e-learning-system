@@ -1,4 +1,4 @@
-package com.elearning.course_service;
+package com.elearning.course_service.entities;
 
 import com.elearning.course_service.entities.Session;
 import jakarta.persistence.*;

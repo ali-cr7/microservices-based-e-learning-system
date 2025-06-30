@@ -1,6 +1,6 @@
 package com.elearning.subscription_service.dto;
 
-import com.elearning.subscription_service.Subscription;
+import com.elearning.subscription_service.entities.Subscription;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
